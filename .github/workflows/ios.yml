@@ -23,8 +23,8 @@ jobs:
       - name: Add iOS platform
         run: flutter create .
 
-      - name: Build iOS Simulator app
-        run: flutter build ios --release --no-codesign
+      - name: Build iOS Simulator app (no signing needed)
+        run: flutter build ios --release --no-codesign --no-tree-shake-icons
 
       - name: Package app for Appetize
         run: |
@@ -41,5 +41,5 @@ jobs:
         uses: appetizeio/github-action-appetize@v1.1.0
         with:
           file: build/ios/iphonesimulator/ABUZ8.zip
-          apiKey: ${{ secrets.APPETIZE_API_KEY }}
+          apiKey: ${{ secrets.APPETIZE_API_KEY}}
           deviceId: 5
