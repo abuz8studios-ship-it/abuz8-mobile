@@ -20,6 +20,9 @@ jobs:
       - name: Install deps
         run: flutter pub get
 
+      - name: Add iOS platform
+        run: flutter create .
+
       - name: Build iOS Simulator app
         run: flutter build ios --release --no-codesign --debug
 
