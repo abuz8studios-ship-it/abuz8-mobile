@@ -24,7 +24,7 @@ jobs:
         run: flutter create .
 
       - name: Build iOS Simulator app
-        run: flutter build ios --release --no-codesign --debug
+        run: flutter build ios --release --no-codesign
 
       - name: Package app for Appetize
         run: |
