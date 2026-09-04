@@ -1,0 +1,42 @@
+name: Build iOS -> Appetize
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-ios:
+    name: Build iOS Simulator and upload to Appetize
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install deps
+        run: flutter pub get
+
+      - name: Build iOS Simulator app
+        run: flutter build ios --release --no-codesign --debug
+
+      - name: Package app for Appetize
+        run: |
+          APP_DIR=build/ios/iphonesimulator/ABUZ8App.app
+          if [ ! -f "$APP_DIR" ]; then
+            echo "No app found. Listing simulator build dir:"
+            ls -la build/ios/iphonesimulator/
+            exit 1
+          fi
+          cd build/ios/iphonesimulator
+          zip -r ABUZ8.zip ABUZ8App.app
+
+      - name: Upload to Appetize
+        uses: appetizeio/github-action-appetize@latest
+        with:
+          file: build/ios/iphonesimulator/ABUZ8.zip
+          apiKey: ${{ secrets.APPETIZE_API_KEY }}
+          deviceId: 5
